@@ -23,7 +23,8 @@ public class FlashcardService {
 
     private Flashcard createFlashcardEntity(CreateFlashcardRequest request) {
         return Flashcard.builder()
-                .originalText(request.text())
+                .originalText(request.originalText())
+                .translatedPolishText(request.translatedPolishText())
                 .flashcardLanguage(FlashcardLanguage.valueOf(request.language()))
                 .build();
     }

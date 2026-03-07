@@ -1,4 +1,4 @@
-CREATE TABLE flashcard
+CREATE TABLE flashcards
 (
     id                      UUID                         NOT NULL,
     created_at              TIMESTAMP WITHOUT TIME ZONE  NOT NULL,

@@ -4,7 +4,7 @@ import com.fishek.api.model.types.FlashcardLanguage;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "flashcard")
+@Table(name = "flashcards")
 @Entity
 @Getter
 @Setter

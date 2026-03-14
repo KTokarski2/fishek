@@ -10,7 +10,6 @@ a = Analysis(
     datas=[
         ('assets/icon.png', 'assets'),
         ('assets/icon.ico', 'assets'),
-        ('client_secrets.json', '.'),
     ],
     hiddenimports=[
     'customtkinter',

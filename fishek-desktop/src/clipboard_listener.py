@@ -6,12 +6,8 @@ import sys
 def get_clipboard():
     try:
         if sys.platform == "win32":
-            import ctypes
-            ctypes.windll.user32.OpenClipboard(0)
-            handle = ctypes.windll.user32.GetClipboardData(13)
-            text = ctypes.wstring_at(handle)
-            ctypes.windll.user32.CloseClipboard()
-            return text
+            import pyperclip
+            return pyperclip.paste()
         else:
             result = subprocess.run(
                 ["xclip", "-selection", "clipboard", "-o"],
@@ -23,17 +19,19 @@ def get_clipboard():
     
 def watch_clipboard(callback):
     previous = get_clipboard()
+    print(f"[clipboard] start, previous: {repr(previous)}")
 
     def loop():
         nonlocal previous
         while True:
             try:
                 current = get_clipboard()
+                print(f"[clipboard] current: {repr(current)}, previous: {repr(previous)}")
                 if current and current != previous:
                     previous = current
                     callback(current)
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"[clipboard] error: {e}")
             time.sleep(0.5)
 
     thread = threading.Thread(target=loop, daemon=True)

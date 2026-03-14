@@ -1,5 +1,9 @@
 import customtkinter as ctk
 import clipboard_listener as cl
+import os
+import sys
+from PIL import Image, ImageTk
+from sheets_client import append_to_sheet
 
 ########### CONFIGURATION ############
 THEME = "dark"
@@ -16,21 +20,27 @@ COMBO_HEIGHT = 30
 BUTTON_TEXT = "Send to Fishek"
 BUTTON_WIDTH = 150
 BUTTON_HEIGHT = 30
+ASSETS_DIR = "assets"
+WINDOWS_ICON = "icon.ico"
+LINUX_ICON = "icon.png"
 ######################################
 
-def build_request(text, language):
-    return {
-        "text": text,
-        "language": language
-    }
-
 def send_to_fishek(combobox, textbox):
-    request = build_request(textbox.get("1.0", "end"), combobox.get())
-    print(request)
+    text = textbox.get("1.0", "end").strip()
+    language = combobox.get()
+    append_to_sheet(text, language)
 
 def set_textbox_value(textbox, value):
     textbox.delete("1.0", "end")
     textbox.insert("1.0", value)
+
+def set_icon(app):
+    assets_dir = os.path.join(os.path.dirname(__file__), "..", ASSETS_DIR)
+    if sys.platform == "win32":
+        app.iconbitmap(os.path.join(assets_dir, WINDOWS_ICON))
+    else:
+        img = Image.open(os.path.join(assets_dir, LINUX_ICON))
+        app.iconphoto(True, ImageTk.PhotoImage(img))
 
 def run_gui():
     ctk.set_appearance_mode(THEME)
@@ -40,6 +50,7 @@ def run_gui():
     app = ctk.CTk()
     app.geometry(APP_SIZE)
     app.title(APP_TITLE)
+    set_icon(app)
     clipboard_text = {"value": ""}
 
     textbox = ctk.CTkTextbox(app, width=INPUT_WIDTH, height=INPUT_HEIGHT)

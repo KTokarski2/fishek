@@ -65,10 +65,11 @@ jobs:
       - name: Build with PyInstaller
         run: pyinstaller fishek.spec --noconfirm
 
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
       - name: Build installer with Inno Setup
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
-        with:
-          filepath: fishek-desktop/fishek.iss
+        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" fishek.iss'
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

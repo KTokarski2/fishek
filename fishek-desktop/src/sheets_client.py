@@ -14,6 +14,11 @@ def get_token_path():
         return os.path.join(CONFIG_DIR, "token.pickle")
     return os.path.join(os.path.dirname(__file__), "..", "token.pickle")
 
+def get_client_secrets_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.join(CONFIG_DIR, "client_secrets.json")
+    return os.path.join(os.path.dirname(__file__), "..", "client_secrets.json")
+
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
@@ -21,7 +26,7 @@ def resource_path(relative_path):
 
 ############# CONFIGURATION #############
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-CLIENT_SECRETS_PATH = resource_path("client_secrets.json")
+CLIENT_SECRETS_PATH = get_client_secrets_path()
 TOKEN_PATH = get_token_path()
 SPREADSHEET_ID_VAR = "SPREADSHEET_ID"
 DATE_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"

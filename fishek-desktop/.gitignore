@@ -1,7 +1,4 @@
-build/
-.gradle/
-.idea/
-*.iml
-.DS_Store
-tokens
-/src/main/resources/client_secrets.json
+.venv/
+__pycache__/
+*.pyc
+.env

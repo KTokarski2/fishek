@@ -1,4 +1,4 @@
-name: Build
+name: Build-desktop-app
 
 on:
   push:
@@ -6,15 +6,18 @@ on:
       - 'v*'
 
 jobs:
-  build-linux:
+  build-linux-desktop:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fishek-desktop
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -41,15 +44,18 @@ jobs:
           name: fishek-linux-rpm
           path: ~/rpmbuild/RPMS/x86_64/*.rpm
 
-  build-windows:
+  build-windows-desktop:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: fishek-desktop
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
@@ -62,10 +68,10 @@ jobs:
       - name: Build installer with Inno Setup
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.4
         with:
-          filepath: fishek.iss
+          filepath: fishek-desktop/fishek.iss
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
           name: fishek-windows-installer
-          path: output/*.exe
+          path: fishek-desktop/output/*.exe

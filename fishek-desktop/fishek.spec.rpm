@@ -1,0 +1,47 @@
+Name:           fishek
+Version:        1.0.0
+Release:        1%{?dist}
+Summary:        FISHEK Desktop Application
+License:        Proprietary
+BuildArch:      x86_64
+AutoReqProv:    no
+
+%description
+FISHEK Desktop - clipboard to Google Sheets integration tool.
+
+%install
+mkdir -p %{buildroot}/opt/fishek
+mkdir -p %{buildroot}/usr/local/bin
+mkdir -p %{buildroot}/usr/share/applications
+mkdir -p %{buildroot}/usr/share/icons/hicolor/256x256/apps
+
+cp -r %{_sourcedir}/fishek/* %{buildroot}/opt/fishek/
+chmod +x %{buildroot}/opt/fishek/fishek
+
+ln -sf /opt/fishek/fishek %{buildroot}/usr/local/bin/fishek
+
+cat > %{buildroot}/usr/share/applications/fishek.desktop << EOF
+[Desktop Entry]
+Name=FISHEK Desktop
+Exec=/opt/fishek/fishek
+Icon=fishek
+Type=Application
+Terminal=false
+Categories=Utility;
+EOF
+
+cp %{_sourcedir}/icon.png %{buildroot}/usr/share/icons/hicolor/256x256/apps/fishek.png
+
+%files
+/opt/fishek/
+/usr/local/bin/fishek
+/usr/share/applications/fishek.desktop
+/usr/share/icons/hicolor/256x256/apps/fishek.png
+
+%post
+gtk-update-icon-cache /usr/share/icons/hicolor/ 2>/dev/null || true
+update-desktop-database /usr/share/applications/ 2>/dev/null || true
+
+%changelog
+* Sat Mar 14 2026 FISHEK <fishek@fishek.com> - 1.0.0-1
+- Initial release

@@ -4,3 +4,5 @@ __pycache__/
 .env
 token.pickle
 client_secrets.json
+dist/
+build/

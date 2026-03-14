@@ -12,7 +12,7 @@ COLOR_THEME = "blue"
 WIDGET_SCALING = 1.0 if sys.platform == "win32" else 2.5
 WINDOW_SCALING = 1.0 if sys.platform == "win32" else 2.5
 APP_TITLE = "FISHEK Desktop"
-APP_SIZE = "200x150" if sys.platform == "win32" else "400x300"
+APP_SIZE = "400x300" if sys.platform == "win32" else "400x300"
 INPUT_WIDTH = 300
 INPUT_HEIGHT = 60
 COMBO_OPTIONS = ["ENGLISH", "RUSSIAN", "FRENCH"]

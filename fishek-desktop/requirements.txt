@@ -28,6 +28,7 @@ Pygments==2.19.2
 pyinstaller==6.19.0
 pyinstaller-hooks-contrib==2026.3
 pyparsing==3.3.2
+pyperclip==1.11.0
 pytest==9.0.2
 python-dotenv==1.2.2
 requests==2.32.5

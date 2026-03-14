@@ -4,6 +4,7 @@ import os
 import sys
 from PIL import Image, ImageTk
 from sheets_client import append_to_sheet
+from CTkMessagebox import CTkMessagebox
 
 ########### CONFIGURATION ############
 THEME = "dark"
@@ -23,12 +24,40 @@ BUTTON_HEIGHT = 30
 ASSETS_DIR = "assets"
 WINDOWS_ICON = "icon.ico"
 LINUX_ICON = "icon.png"
+MESSAGE_WINDOW_WIDTH = 200
+MESSAGE_WINDOW_HEIGHT = 100
+MESSAGE_WINDOWS_TITLE_SUCCESS = "Success"
+MESSAGE_WINDOWS_TITLE_ERROR = "Error"
 ######################################
 
-def send_to_fishek(combobox, textbox):
+def send_to_fishek(app, combobox, textbox, button):
     text = textbox.get("1.0", "end").strip()
     language = combobox.get()
-    append_to_sheet(text, language)
+    textbox.configure(state="disabled")
+    button.configure(state="disabled")
+    try:
+        append_to_sheet(text, language)
+        msg = CTkMessagebox(
+            master=app,
+            title=MESSAGE_WINDOWS_TITLE_SUCCESS,
+            message="Upload successful!",
+            width=MESSAGE_WINDOW_WIDTH,
+            height=MESSAGE_WINDOW_HEIGHT
+        )
+        msg.get()
+        textbox.configure(state="normal")
+        set_textbox_value(textbox, "")
+        button.configure(state="normal")
+    except Exception as e:
+        textbox.configure(state="normal")
+        button.configure(state="normal")
+        CTkMessagebox(
+            master=app,
+            title=MESSAGE_WINDOWS_TITLE_ERROR,
+            message=f"Upload failed: {str(e)}",
+            width=MESSAGE_WINDOW_WIDTH,
+            height=MESSAGE_WINDOW_HEIGHT
+        )
 
 def set_textbox_value(textbox, value):
     textbox.delete("1.0", "end")
@@ -59,7 +88,13 @@ def run_gui():
     combobox = ctk.CTkComboBox(app, width=COMBO_WIDTH, height=COMBO_HEIGHT, values=COMBO_OPTIONS)
     combobox.pack(pady=20)
 
-    button = ctk.CTkButton(app, text=BUTTON_TEXT, width=BUTTON_WIDTH, height=BUTTON_HEIGHT, command=lambda: send_to_fishek(combobox, textbox))
+    button = ctk.CTkButton(
+        app, 
+        text=BUTTON_TEXT, 
+        width=BUTTON_WIDTH, 
+        height=BUTTON_HEIGHT, 
+        command=lambda: send_to_fishek(app, combobox, textbox, button)
+    )
     button.pack(pady=20)
 
     def on_clipboard_change(text):

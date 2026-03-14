@@ -46,7 +46,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     icon='assets/icon.ico' if sys.platform == 'win32' else 'assets/icon.png',
 )
 

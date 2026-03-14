@@ -7,11 +7,15 @@ def get_clipboard():
     try:
         if sys.platform == "win32":
             import ctypes
-            ctypes.windll.user32.OpenClipboard(0)
-            handle = ctypes.windll.user32.GetClipboardData(13)
-            text = ctypes.wstring_at(handle)
-            ctypes.windll.user32.CloseClipboard()
-            return text
+            if not ctypes.windll.user32.OpenClipboard(0):
+                return None
+            try:
+                handle = ctypes.windll.user32.GetClipboardData(13)
+                if not handle:
+                    return None
+                return ctypes.wstring_at(handle)
+            finally:
+                ctypes.windll.user32.CloseClipboard()
         else:
             result = subprocess.run(
                 ["xclip", "-selection", "clipboard", "-o"],

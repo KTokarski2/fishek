@@ -7,7 +7,12 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 import pickle
 
-CONFIG_DIR = os.path.join(os.path.expanduser("~"), ".config", "fishek")
+def get_config_dir():
+    if sys.platform == "win32":
+        return os.path.join(os.environ.get("APPDATA", ""), "fishek")
+    return os.path.join(os.path.expanduser("~"), ".config", "fishek")
+
+CONFIG_DIR = get_config_dir()
 
 def get_token_path():
     if getattr(sys, 'frozen', False):

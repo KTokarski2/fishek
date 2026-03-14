@@ -3,7 +3,12 @@ import sys
 from dotenv import load_dotenv
 from gui import run_gui
 
-CONFIG_DIR = os.path.join(os.path.expanduser("~"), ".config", "fishek")
+def get_config_dir():
+    if sys.platform == "win32":
+        return os.path.join(os.environ.get("APPDATA", ""), "fishek")
+    return os.path.join(os.path.expanduser("~"), ".config", "fishek")
+
+CONFIG_DIR = get_config_dir()
 ENV_PATH = os.path.join(CONFIG_DIR, ".env")
 
 def is_dev():

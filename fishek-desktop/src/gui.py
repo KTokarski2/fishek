@@ -30,6 +30,11 @@ MESSAGE_WINDOWS_TITLE_SUCCESS = "Success"
 MESSAGE_WINDOWS_TITLE_ERROR = "Error"
 ######################################
 
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(__file__), "..", relative_path)
+
 def send_to_fishek(app, combobox, textbox, button):
     text = textbox.get("1.0", "end").strip()
     language = combobox.get()
@@ -64,11 +69,10 @@ def set_textbox_value(textbox, value):
     textbox.insert("1.0", value)
 
 def set_icon(app):
-    assets_dir = os.path.join(os.path.dirname(__file__), "..", ASSETS_DIR)
     if sys.platform == "win32":
-        app.iconbitmap(os.path.join(assets_dir, WINDOWS_ICON))
+        app.iconbitmap(resource_path(os.path.join(ASSETS_DIR, WINDOWS_ICON)))
     else:
-        img = Image.open(os.path.join(assets_dir, LINUX_ICON))
+        img = Image.open(resource_path(os.path.join(ASSETS_DIR, LINUX_ICON)))
         app.iconphoto(True, ImageTk.PhotoImage(img))
 
 def run_gui():

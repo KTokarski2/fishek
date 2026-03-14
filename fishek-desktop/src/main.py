@@ -1,16 +1,20 @@
 import os
+import sys
 from dotenv import load_dotenv
 from gui import run_gui
 
-def get_config():
-    api_key = os.getenv("API_KEY")
-    return {
-        "api_key": api_key
-    }
+CONFIG_DIR = os.path.join(os.path.expanduser("~"), ".config", "fishek")
+ENV_PATH = os.path.join(CONFIG_DIR, ".env")
+
+def is_dev():
+    return not getattr(sys, 'frozen', False)
 
 def main():
-    load_dotenv()
-    print(get_config())
+    if is_dev():
+        load_dotenv()
+    else:
+        os.makedirs(CONFIG_DIR, exist_ok=True)
+        load_dotenv(ENV_PATH)
     run_gui()
 
 if __name__ == "__main__":

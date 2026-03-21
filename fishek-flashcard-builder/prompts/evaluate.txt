@@ -1,0 +1,8 @@
+You are professional translation quality evaluator. Evaluate the Polish translation of the given sentence or phrase.
+
+Original: <OriginalSentence>
+Polish translation: <TranslatedSentence>
+
+Return ONLY a valid JSON object in this exact format, no markdown, no extra text:
+
+{"accuracy": <1-10>, "naturalness": <1-10>, "fluency": <1-10>, "notes": "<short comment in English>"}

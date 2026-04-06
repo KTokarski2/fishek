@@ -158,10 +158,8 @@ def show_results_table(frame, results, app, accepted_translations, sheets_screen
 
     app.attributes("-zoomed", True)
 
-    # decisions[i]: "accept" | "refine" | "drop"  — default refine for all
     decisions = ["refine"] * len(results)
 
-    # Bottom action bar — pack BEFORE table so expand=True on table works correctly
     bottom = ctk.CTkFrame(frame, fg_color="gray18", height=70, corner_radius=0)
     bottom.pack(fill="x", side="bottom", padx=APP_PADDING, pady=(0, APP_PADDING))
     bottom.pack_propagate(False)
@@ -211,13 +209,11 @@ def show_results_table(frame, results, app, accepted_translations, sheets_screen
         command=on_continue,
     ).pack(side="right", padx=20, pady=13)
 
-    # Scrollable table
     table_frame = ctk.CTkScrollableFrame(frame, fg_color="transparent")
     table_frame.pack(fill="both", expand=True, padx=APP_PADDING, pady=(APP_PADDING, 0))
     for col, weight in enumerate(COLUMN_WEIGHTS):
         table_frame.grid_columnconfigure(col, weight=weight)
 
-    # Header row
     for j, header in enumerate(TABLE_HEADERS):
         cell = make_cell(table_frame, 0, j, HEADER_COLOR)
         ctk.CTkLabel(
@@ -227,7 +223,6 @@ def show_results_table(frame, results, app, accepted_translations, sheets_screen
             anchor="w",
         ).pack(fill="x", padx=16, pady=CELL_PAD_Y)
 
-    # Data rows — results format: [word, language, translation, accuracy, naturalness, fluency, notes]
     for i, (word, language, translation, accuracy, naturalness, fluency, notes) in enumerate(results):
         row_num = i + 1
         fg = ROW_COLOR if i % 2 == 0 else ALT_ROW_COLOR

@@ -1,10 +1,6 @@
 from services.decision_service import build_result_row, partition_decisions
 
 
-# ---------------------------------------------------------------------------
-# build_result_row
-# ---------------------------------------------------------------------------
-
 def test_build_result_row_full_evaluation():
     evaluation = {"accuracy": 9, "naturalness": 8, "fluency": 7, "notes": "Looks good"}
     row = build_result_row("cat", "english", "kot", evaluation)

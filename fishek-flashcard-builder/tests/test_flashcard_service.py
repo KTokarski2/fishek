@@ -2,10 +2,6 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 
-# ---------------------------------------------------------------------------
-# normalize_language
-# ---------------------------------------------------------------------------
-
 def test_normalize_language_lowercase():
     from services.flashcard_service import normalize_language
     assert normalize_language("english") == "ENGLISH"
@@ -28,10 +24,6 @@ def test_normalize_language_unknown_uppercases():
     from services.flashcard_service import normalize_language
     assert normalize_language("german") == "GERMAN"
 
-
-# ---------------------------------------------------------------------------
-# get_token
-# ---------------------------------------------------------------------------
 
 def test_get_token_returns_token_string():
     from services.flashcard_service import get_token
@@ -57,10 +49,6 @@ def test_get_token_raises_on_http_error():
         with pytest.raises(req.HTTPError):
             get_token()
 
-
-# ---------------------------------------------------------------------------
-# create_flashcard
-# ---------------------------------------------------------------------------
 
 def test_create_flashcard_sends_correct_payload():
     from services.flashcard_service import create_flashcard
@@ -92,10 +80,6 @@ def test_create_flashcard_raises_on_http_error():
         with pytest.raises(req.HTTPError):
             create_flashcard("cat", "kot", "english", "tok123")
 
-
-# ---------------------------------------------------------------------------
-# create_flashcards
-# ---------------------------------------------------------------------------
 
 def _make_row(word="cat", language="english", translation="kot"):
     return [word, language, translation, 9, 8, 9, "Good translation"]

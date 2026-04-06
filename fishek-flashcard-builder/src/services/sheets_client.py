@@ -30,14 +30,12 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.dirname(__file__), "..", relative_path)
 
-############# CONFIGURATION #############
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 CLIENT_SECRETS_PATH = get_client_secrets_path()
 TOKEN_PATH = get_token_path()
 SPREADSHEET_ID_VAR = "SPREADSHEET_ID"
 RANGE_NAME = "A:C"
 ERROR_MESSAGE_NO_SPREADSHEET_ID = "Spreadsheet ID not found."
-#########################################
 
 def get_credentials():
     creds = None

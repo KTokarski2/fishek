@@ -6,10 +6,6 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 
-# ---------------------------------------------------------------------------
-# get_config_dir
-# ---------------------------------------------------------------------------
-
 def test_get_config_dir_linux():
     from services.sheets_client import get_config_dir
 
@@ -29,10 +25,6 @@ def test_get_config_dir_windows():
     assert result.endswith("fishek")
     assert "Roaming" in result
 
-
-# ---------------------------------------------------------------------------
-# get_sheet_data — header stripping
-# ---------------------------------------------------------------------------
 
 def _mock_sheets_service(values):
     service = MagicMock()
@@ -95,10 +87,6 @@ def test_get_sheet_data_raises_without_spreadsheet_id():
         with pytest.raises(ValueError, match="Spreadsheet ID not found"):
             get_sheet_data()
 
-
-# ---------------------------------------------------------------------------
-# get_credentials — token caching
-# ---------------------------------------------------------------------------
 
 def test_get_credentials_loads_valid_token(tmp_path):
     from services.sheets_client import get_credentials

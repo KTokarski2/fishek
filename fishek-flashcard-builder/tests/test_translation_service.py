@@ -4,10 +4,6 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 
-# ---------------------------------------------------------------------------
-# load_prompt
-# ---------------------------------------------------------------------------
-
 def test_load_prompt_replaces_placeholders(tmp_path):
     from services.translation_service import load_prompt
 
@@ -46,10 +42,6 @@ def test_load_prompt_no_placeholders(tmp_path):
     assert result == "Just a plain prompt."
 
 
-# ---------------------------------------------------------------------------
-# get_translation
-# ---------------------------------------------------------------------------
-
 def test_get_translation_calls_ollama_with_filled_prompt(tmp_path):
     from services.translation_service import get_translation
 
@@ -63,10 +55,6 @@ def test_get_translation_calls_ollama_with_filled_prompt(tmp_path):
     mock_ollama.assert_called_once_with("Translate cat from English.")
     assert result == "kot"
 
-
-# ---------------------------------------------------------------------------
-# evaluate_translation
-# ---------------------------------------------------------------------------
 
 def test_evaluate_translation_parses_valid_json():
     from services.translation_service import evaluate_translation
@@ -93,10 +81,6 @@ def test_evaluate_translation_falls_back_on_invalid_json():
     assert result["raw_response"] == bad_response
 
 
-# ---------------------------------------------------------------------------
-# get_refined_translation
-# ---------------------------------------------------------------------------
-
 def test_get_refined_translation_passes_all_placeholders(tmp_path):
     from services.translation_service import get_refined_translation
 
@@ -111,10 +95,6 @@ def test_get_refined_translation_passes_all_placeholders(tmp_path):
     mock_ollama.assert_called_once_with(expected_prompt)
     assert result == "ulepszone"
 
-
-# ---------------------------------------------------------------------------
-# call_ollama
-# ---------------------------------------------------------------------------
 
 def test_call_ollama_returns_stripped_response():
     from services.translation_service import call_ollama

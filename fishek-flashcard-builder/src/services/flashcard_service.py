@@ -44,10 +44,6 @@ def create_flashcard(original_text: str, translated_polish_text: str, language: 
 
 
 def create_flashcards(accepted_translations: list) -> list[str]:
-    """
-    accepted_translations: list of [word, language, translation, accuracy, naturalness, fluency, notes]
-    Returns list of words that failed (empty list = all OK).
-    """
     token = get_token()
     failed = []
     for item in accepted_translations:

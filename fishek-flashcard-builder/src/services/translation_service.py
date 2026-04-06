@@ -42,7 +42,22 @@ def get_translation(word: str, language: str) -> str:
     )
     return call_ollama(prompt)
 
-def evaluate_translation(original_sentence: str, translated_sentence: str) -> str:
+def get_refined_translation(word: str, language: str, previous_translation: str, accuracy, naturalness, fluency, notes: str) -> str:
+    prompt = load_prompt(
+        "refine.txt",
+        {
+            "<Word>": word,
+            "<Language>": language,
+            "<PreviousTranslation>": previous_translation,
+            "<Accuracy>": str(accuracy),
+            "<Naturalness>": str(naturalness),
+            "<Fluency>": str(fluency),
+            "<Notes>": notes,
+        },
+    )
+    return call_ollama(prompt)
+
+def evaluate_translation(original_sentence: str, translated_sentence: str) -> dict:
     prompt = load_prompt(
         "evaluate.txt",
         {

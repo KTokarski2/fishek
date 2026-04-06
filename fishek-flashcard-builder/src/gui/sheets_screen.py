@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from gui import main_screen
 from services.sheets_client import get_sheet_data
-import services.translation_service as ts
+from gui import translation_screen
 
 APP_PADDING = 20
 APP_GEOMETRY = "1600x1000"
@@ -23,14 +23,16 @@ BUTTON_HEIGHT = 50
 BUTTON_FONT_SIZE = 30
 BUTTON_BORDER_SPACING = 30
 
-def handle_translate_button_click(parent):
-    print("Translate button clicked")
+def handle_translate_button_click(sheets_frame, app, table_data):
+    translation_screen.show_translation_screen(sheets_frame, app, table_data)
 
 def handle_back_button_click(main_frame, parent):
     parent.pack_forget()
+    main_screen.set_resizable(main_frame.master, False)
+    main_frame.master.geometry(main_screen.APP_GEOMETRY)
     main_frame.pack(fill="both", expand=True, padx=APP_PADDING, pady=APP_PADDING)
 
-def show_action_buttons(main_frame, parent):
+def show_action_buttons(main_frame, parent, table_data):
 
     buttons_frame = ctk.CTkFrame(parent, fg_color="transparent")
     buttons_frame.pack(pady=APP_PADDING)
@@ -42,7 +44,7 @@ def show_action_buttons(main_frame, parent):
         width=BUTTON_WIDTH,
         height=BUTTON_HEIGHT,
         border_spacing=BUTTON_BORDER_SPACING,
-        command=lambda: handle_translate_button_click(parent)
+        command=lambda: handle_translate_button_click(parent, parent.master, table_data)
     )
 
     translate_button.pack(side="left", padx=APP_PADDING)
@@ -128,7 +130,4 @@ def show_sheets_screen(main_frame, app):
     )
 
     show_flashcards_table(sheets_screen_frame, table_data)
-    show_action_buttons(main_frame, sheets_screen_frame)
-
-    print(ts.get_translation("deadline", "English"))
-    print(ts.evaluate_translation("deadline", "termin limitowy"))
+    show_action_buttons(main_frame, sheets_screen_frame, table_data)

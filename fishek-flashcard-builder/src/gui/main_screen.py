@@ -56,6 +56,17 @@ def options_buttons(parent):
 def set_resizable(app, resizable):
     app.resizable(resizable, resizable)
 
+def main_screen_reinit(app):
+    for widget in app.winfo_children():
+        widget.destroy()
+    app.geometry(APP_GEOMETRY)
+    app.attributes("-zoomed", False)
+    set_resizable(app, False)
+    main_screen_frame = ctk.CTkFrame(app)
+    main_screen_header(main_screen_frame)
+    options_buttons(main_screen_frame)
+    main_screen_frame.pack(fill="both", expand=True)
+
 def main_screen():
     app = ctk.CTk()
     app.title(APP_TITLE)

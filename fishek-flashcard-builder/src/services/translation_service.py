@@ -1,12 +1,19 @@
 import os
 import json
+import sys
 import requests
 from pathlib import Path
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
 OLLAMA_TEMPERATURE = float(os.getenv("OLLAMA_TEMPERATURE", "0.1"))
-PROMPTS_DIR = Path(os.getenv("PROMPTS_DIR", "prompts"))
+
+def _get_prompts_dir() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(sys._MEIPASS) / "prompts"
+    return Path(os.getenv("PROMPTS_DIR", "prompts"))
+
+PROMPTS_DIR = _get_prompts_dir()
 
 def load_prompt(filename: str, placeholders: dict[str, str]) -> str:
     prompt_path = PROMPTS_DIR / filename

@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from gui.sheets_screen import show_sheets_screen
+from gui.generate_screen import show_generate_screen
 
 APP_GEOMETRY = "800x500"
 APP_TITLE = "Fishek Flashcard Builder"
@@ -16,8 +17,9 @@ def handle_download_button_click(main_frame, app):
     show_sheets_screen(main_frame, app)
     set_resizable(app, True)
 
-def handle_generate_button_click():
-    pass
+def handle_generate_button_click(main_frame, app):
+    show_generate_screen(main_frame, app)
+    set_resizable(app, True)
 
 def main_screen_header(parent):
     header = ctk.CTkLabel(
@@ -49,7 +51,7 @@ def options_buttons(parent):
         width=OPTION_BUTTON_WIDTH,
         height=OPTION_BUTTON_HEIGHT,
         border_spacing=OPTION_BUTTON_BORDER_SPACING,
-        command=lambda: handle_generate_button_click())
+        command=lambda: handle_generate_button_click(parent, parent.master))
     
     generate_button.pack(pady=COMPONENTS_PADDING)
 

@@ -1,0 +1,6 @@
+Is "<Word>" a real <Language> word or phrase that belongs to any of these topics: <Tags>?
+
+Reply with a JSON object only, no additional text:
+{"valid": true, "reason": "brief explanation"}
+or
+{"valid": false, "reason": "brief explanation"}

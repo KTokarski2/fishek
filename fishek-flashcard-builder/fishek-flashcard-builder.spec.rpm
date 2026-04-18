@@ -1,0 +1,41 @@
+Name:           fishek-flashcard-builder
+Version:        1.0.0
+Release:        1%{?dist}
+Summary:        FISHEK Flashcard Builder Application
+License:        Proprietary
+BuildArch:      x86_64
+AutoReqProv:    no
+
+%description
+FISHEK Flashcard Builder - AI-powered flashcard generation tool.
+
+%install
+mkdir -p %{buildroot}/opt/fishek-flashcard-builder
+mkdir -p %{buildroot}/usr/local/bin
+mkdir -p %{buildroot}/usr/share/applications
+
+cp -r %{_sourcedir}/fishek-flashcard-builder/* %{buildroot}/opt/fishek-flashcard-builder/
+chmod +x %{buildroot}/opt/fishek-flashcard-builder/fishek-flashcard-builder
+
+ln -sf /opt/fishek-flashcard-builder/fishek-flashcard-builder %{buildroot}/usr/local/bin/fishek-flashcard-builder
+
+cat > %{buildroot}/usr/share/applications/fishek-flashcard-builder.desktop << EOF
+[Desktop Entry]
+Name=FISHEK Flashcard Builder
+Exec=/opt/fishek-flashcard-builder/fishek-flashcard-builder
+Type=Application
+Terminal=false
+Categories=Utility;
+EOF
+
+%files
+/opt/fishek-flashcard-builder/
+/usr/local/bin/fishek-flashcard-builder
+/usr/share/applications/fishek-flashcard-builder.desktop
+
+%post
+update-desktop-database /usr/share/applications/ 2>/dev/null || true
+
+%changelog
+* Fri Apr 18 2026 FISHEK <fishek@fishek.com> - 1.0.0-1
+- Initial release

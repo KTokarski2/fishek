@@ -1,0 +1,3 @@
+Generate a list of exactly <Count> distinct <Language> words or phrases related to these topics: <Tags>.
+
+Return ONLY the words or phrases, one per line. No numbering, no bullet points, no translations, no explanations.

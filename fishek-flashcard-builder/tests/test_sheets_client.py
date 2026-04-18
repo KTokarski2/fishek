@@ -111,6 +111,11 @@ def test_get_credentials_refreshes_expired_token(tmp_path):
     mock_creds.valid = False
     mock_creds.expired = True
     mock_creds.refresh_token = "refresh_tok"
+
+    def do_refresh(_):
+        mock_creds.valid = True
+
+    mock_creds.refresh.side_effect = do_refresh
     token_file = tmp_path / "token.pickle"
 
     with patch("services.sheets_client.TOKEN_PATH", token_file), \

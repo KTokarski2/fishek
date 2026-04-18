@@ -100,3 +100,93 @@ jobs:
         with:
           name: fishek-windows-installer
           path: fishek-desktop/output/*.exe
+
+  run-tests-flashcard-builder:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fishek-flashcard-builder
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+  build-linux-flashcard-builder:
+    runs-on: ubuntu-latest
+    needs: run-tests-flashcard-builder
+    defaults:
+      run:
+        working-directory: fishek-flashcard-builder
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: pyinstaller fishek-flashcard-builder.spec --noconfirm
+
+      - name: Build RPM
+        run: |
+          sudo apt-get install -y rpm
+          mkdir -p ~/rpmbuild/SOURCES/fishek-flashcard-builder
+          mkdir -p ~/rpmbuild/SPECS
+          cp -r dist/fishek-flashcard-builder/* ~/rpmbuild/SOURCES/fishek-flashcard-builder/
+          cp fishek-flashcard-builder.spec.rpm ~/rpmbuild/SPECS/fishek-flashcard-builder.spec
+          rpmbuild -bb ~/rpmbuild/SPECS/fishek-flashcard-builder.spec
+
+      - name: Upload RPM
+        uses: actions/upload-artifact@v4
+        with:
+          name: fishek-flashcard-builder-linux-rpm
+          path: ~/rpmbuild/RPMS/x86_64/*.rpm
+
+  build-windows-flashcard-builder:
+    runs-on: windows-latest
+    needs: run-tests-flashcard-builder
+    defaults:
+      run:
+        working-directory: fishek-flashcard-builder
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: pyinstaller fishek-flashcard-builder.spec --noconfirm
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Build installer with Inno Setup
+        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" fishek-flashcard-builder.iss'
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: fishek-flashcard-builder-windows-installer
+          path: fishek-flashcard-builder/output/*.exe

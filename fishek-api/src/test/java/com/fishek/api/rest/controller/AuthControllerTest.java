@@ -1,7 +1,6 @@
 package com.fishek.api.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fishek.api.config.JpaConfig;
 import com.fishek.api.config.JwtAuthFilter;
 import com.fishek.api.config.SecurityConfig;
 import com.fishek.api.config.UserDetailsServiceConfig;
@@ -16,7 +15,6 @@ import com.fishek.api.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;

@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,6 +28,10 @@ public class FlashcardService {
                 .originalText(request.originalText())
                 .translatedPolishText(request.translatedPolishText())
                 .flashcardLanguage(FlashcardLanguage.valueOf(request.language()))
+                .repetitions(0)
+                .easeFactor(2.5)
+                .intervalDays(0)
+                .dueDate(LocalDate.now())
                 .build();
     }
 

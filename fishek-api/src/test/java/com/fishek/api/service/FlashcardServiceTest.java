@@ -44,7 +44,7 @@ class FlashcardServiceTest {
         com.fishek.api.model.persistance.Flashcard saved = captor.getValue();
         assertThat(saved.getOriginalText()).isEqualTo(ORIGINAL_TEXT);
         assertThat(saved.getTranslatedPolishText()).isEqualTo(TRANSLATED_TEXT);
-        assertThat(saved.getFlashcardLanguage().name()).isEqualTo(LANGUAGE_ENGLISH);
+        assertThat(saved.getLanguage().name()).isEqualTo(LANGUAGE_ENGLISH);
     }
 
     @Test

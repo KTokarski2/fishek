@@ -1,0 +1,1 @@
+ALTER TABLE flashcards RENAME COLUMN flashcard_language TO language;

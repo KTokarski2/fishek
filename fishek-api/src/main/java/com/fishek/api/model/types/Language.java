@@ -1,6 +1,6 @@
 package com.fishek.api.model.types;
 
-public enum FlashcardLanguage {
+public enum Language {
     ENGLISH,
     FRENCH,
     RUSSIAN

@@ -1,11 +1,10 @@
 package com.fishek.api.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fishek.api.config.JpaConfig;
 import com.fishek.api.config.JwtAuthFilter;
 import com.fishek.api.config.SecurityConfig;
 import com.fishek.api.config.UserDetailsServiceConfig;
-import com.fishek.api.exception.EmailAlreadyExistsException;
+import com.fishek.api.exception.ConflictException;
 import com.fishek.api.model.dto.AuthResponse;
 import com.fishek.api.model.dto.LoginRequest;
 import com.fishek.api.model.dto.RegisterRequest;
@@ -16,7 +15,6 @@ import com.fishek.api.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -94,7 +92,7 @@ class AuthControllerTest {
     @Test
     void shouldReturn409WhenEmailAlreadyExists() throws Exception {
         when(authService.register(any()))
-                .thenThrow(new EmailAlreadyExistsException(EMAIL_ALREADY_IN_USE));
+                .thenThrow(new ConflictException(EMAIL_ALREADY_IN_USE));
 
         mockMvc.perform(post(REGISTER_URL)
                         .with(csrf())

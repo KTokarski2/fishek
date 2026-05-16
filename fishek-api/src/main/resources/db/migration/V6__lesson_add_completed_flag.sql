@@ -1,0 +1,1 @@
+ALTER TABLE lessons ADD COLUMN lesson_completed BOOLEAN DEFAULT FALSE;

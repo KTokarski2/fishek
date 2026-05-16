@@ -2,12 +2,14 @@ package com.fishek.api.service;
 
 import com.fishek.api.model.dto.CreateFlashcardRequest;
 import com.fishek.api.model.persistance.Flashcard;
-import com.fishek.api.model.types.FlashcardLanguage;
+import com.fishek.api.model.types.Language;
 import com.fishek.api.repository.FlashcardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -25,7 +27,11 @@ public class FlashcardService {
         return Flashcard.builder()
                 .originalText(request.originalText())
                 .translatedPolishText(request.translatedPolishText())
-                .flashcardLanguage(FlashcardLanguage.valueOf(request.language()))
+                .language(Language.valueOf(request.language()))
+                .repetitions(0)
+                .easeFactor(2.5)
+                .intervalDays(0)
+                .dueDate(LocalDate.now())
                 .build();
     }
 

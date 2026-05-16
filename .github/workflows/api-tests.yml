@@ -1,0 +1,24 @@
+name: API Tests
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  run-tests-api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fishek-api
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Run tests
+        run: ./gradlew test

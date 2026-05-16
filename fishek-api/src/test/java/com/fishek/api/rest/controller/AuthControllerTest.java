@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fishek.api.config.JwtAuthFilter;
 import com.fishek.api.config.SecurityConfig;
 import com.fishek.api.config.UserDetailsServiceConfig;
-import com.fishek.api.exception.EmailAlreadyExistsException;
+import com.fishek.api.exception.ConflictException;
 import com.fishek.api.model.dto.AuthResponse;
 import com.fishek.api.model.dto.LoginRequest;
 import com.fishek.api.model.dto.RegisterRequest;
@@ -92,7 +92,7 @@ class AuthControllerTest {
     @Test
     void shouldReturn409WhenEmailAlreadyExists() throws Exception {
         when(authService.register(any()))
-                .thenThrow(new EmailAlreadyExistsException(EMAIL_ALREADY_IN_USE));
+                .thenThrow(new ConflictException(EMAIL_ALREADY_IN_USE));
 
         mockMvc.perform(post(REGISTER_URL)
                         .with(csrf())

@@ -1,6 +1,6 @@
 package com.fishek.api.service;
 
-import com.fishek.api.exception.EmailAlreadyExistsException;
+import com.fishek.api.exception.ConflictException;
 import com.fishek.api.model.dto.AuthResponse;
 import com.fishek.api.model.dto.LoginRequest;
 import com.fishek.api.model.dto.RegisterRequest;
@@ -27,7 +27,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new EmailAlreadyExistsException(ERROR_EMAIL_ALREADY_IN_USE);
+            throw new ConflictException(ERROR_EMAIL_ALREADY_IN_USE);
         }
         User user = User.builder()
                 .email(request.email())

@@ -1,4 +1,4 @@
-package com.fishek.api.model.persistance;
+package com.fishek.api.model.persistence;
 
 import com.fishek.api.model.types.Language;
 import jakarta.persistence.*;

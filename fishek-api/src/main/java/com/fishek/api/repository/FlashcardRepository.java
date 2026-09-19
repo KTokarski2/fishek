@@ -1,6 +1,6 @@
 package com.fishek.api.repository;
 
-import com.fishek.api.model.persistance.Flashcard;
+import com.fishek.api.model.persistence.Flashcard;
 import com.fishek.api.model.types.Language;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

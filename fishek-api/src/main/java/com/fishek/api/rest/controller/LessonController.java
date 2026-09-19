@@ -29,7 +29,7 @@ public class LessonController {
             @PathVariable String lessonId,
             @RequestBody LessonEvaluationRequest request
     ) {
-        lessonService.evaluateLesson(request);
+        lessonService.evaluateLesson(lessonId, request);
         return ResponseEntity.ok().build();
     }
 }

@@ -6,8 +6,8 @@ import com.fishek.api.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     public static final String GENERAL_ERROR_VALIDATION_MESSAGE = "Invalid value";
+    public static final String MISSING_REQUIRED_PARAMETER_MESSAGE = "Missing required parameter: ";
     public static final String ERROR = "error";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,6 +35,14 @@ public class GlobalExceptionHandler {
                         ).orElse(GENERAL_ERROR_VALIDATION_MESSAGE)
                 ));
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Map<String, String>> handleMissingParameters(
+            MissingServletRequestParameterException ex
+    ) {
+        return ResponseEntity.badRequest()
+                .body(Map.of(ERROR, MISSING_REQUIRED_PARAMETER_MESSAGE + ex.getParameterName()));
     }
 
     @ExceptionHandler(NotFoundException.class)

@@ -1,6 +1,6 @@
 package com.fishek.api.repository;
 
-import com.fishek.api.model.persistance.User;
+import com.fishek.api.model.persistence.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

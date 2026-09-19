@@ -1,15 +1,13 @@
-package com.fishek.api.model.persistance;
+package com.fishek.api.model.persistence;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Table(name = "lesson_flashcards")
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LessonFlashcard extends AbstractJpa {
@@ -22,6 +20,6 @@ public class LessonFlashcard extends AbstractJpa {
     @JoinColumn(name = "flashcard_id", nullable = false)
     private Flashcard flashcard;
 
-    @Column(name = "correct", nullable = false)
+    @Column(name = "correct")
     private Boolean correct;
 }

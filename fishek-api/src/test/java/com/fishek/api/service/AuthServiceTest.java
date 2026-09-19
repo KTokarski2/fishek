@@ -4,7 +4,7 @@ import com.fishek.api.exception.ConflictException;
 import com.fishek.api.model.dto.AuthResponse;
 import com.fishek.api.model.dto.LoginRequest;
 import com.fishek.api.model.dto.RegisterRequest;
-import com.fishek.api.model.persistance.User;
+import com.fishek.api.model.persistence.User;
 import com.fishek.api.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

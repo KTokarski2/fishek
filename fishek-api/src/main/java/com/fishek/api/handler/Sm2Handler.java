@@ -1,6 +1,6 @@
 package com.fishek.api.handler;
 
-import com.fishek.api.model.persistance.Flashcard;
+import com.fishek.api.model.persistence.Flashcard;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

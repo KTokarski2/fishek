@@ -1,7 +1,7 @@
 package com.fishek.api.service;
 
 import com.fishek.api.model.dto.CreateFlashcardRequest;
-import com.fishek.api.model.persistance.Flashcard;
+import com.fishek.api.model.persistence.Flashcard;
 import com.fishek.api.model.types.Language;
 import com.fishek.api.repository.FlashcardRepository;
 import lombok.RequiredArgsConstructor;

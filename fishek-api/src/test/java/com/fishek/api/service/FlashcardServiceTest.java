@@ -1,7 +1,7 @@
 package com.fishek.api.service;
 
 import com.fishek.api.model.dto.CreateFlashcardRequest;
-import com.fishek.api.model.persistance.Flashcard;
+import com.fishek.api.model.persistence.Flashcard;
 import com.fishek.api.repository.FlashcardRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +38,10 @@ class FlashcardServiceTest {
 
         flashcardService.saveNewFlashcard(request);
 
-        ArgumentCaptor<Flashcard> captor = ArgumentCaptor.forClass(com.fishek.api.model.persistance.Flashcard.class);
+        ArgumentCaptor<Flashcard> captor = ArgumentCaptor.forClass(com.fishek.api.model.persistence.Flashcard.class);
         verify(flashcardRepository).save(captor.capture());
 
-        com.fishek.api.model.persistance.Flashcard saved = captor.getValue();
+        com.fishek.api.model.persistence.Flashcard saved = captor.getValue();
         assertThat(saved.getOriginalText()).isEqualTo(ORIGINAL_TEXT);
         assertThat(saved.getTranslatedPolishText()).isEqualTo(TRANSLATED_TEXT);
         assertThat(saved.getLanguage().name()).isEqualTo(LANGUAGE_ENGLISH);
@@ -63,9 +63,9 @@ class FlashcardServiceTest {
                 ORIGINAL_TEXT, TRANSLATED_TEXT, LANGUAGE_ENGLISH
         );
         flashcardService.saveNewFlashcard(request);
-        ArgumentCaptor<com.fishek.api.model.persistance.Flashcard> captor = ArgumentCaptor.forClass(com.fishek.api.model.persistance.Flashcard.class);
+        ArgumentCaptor<com.fishek.api.model.persistence.Flashcard> captor = ArgumentCaptor.forClass(com.fishek.api.model.persistence.Flashcard.class);
         verify(flashcardRepository).save(captor.capture());
-        com.fishek.api.model.persistance.Flashcard saved = captor.getValue();
+        com.fishek.api.model.persistence.Flashcard saved = captor.getValue();
         assertThat(saved.getRepetitions()).isEqualTo(0);
         assertThat(saved.getEaseFactor()).isEqualTo(2.5);
         assertThat(saved.getIntervalDays()).isEqualTo(0);

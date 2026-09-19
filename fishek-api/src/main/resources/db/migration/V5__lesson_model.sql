@@ -18,7 +18,7 @@ CREATE TABLE lesson_flashcards (
     updated_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     lesson_id    UUID                        NOT NULL,
     flashcard_id UUID                        NOT NULL,
-    correct      BOOLEAN                     NOT NULL,
+    correct      BOOLEAN,
 
     CONSTRAINT pk_lesson_flashcards PRIMARY KEY (id),
     CONSTRAINT fk_lesson_flashcards_lesson

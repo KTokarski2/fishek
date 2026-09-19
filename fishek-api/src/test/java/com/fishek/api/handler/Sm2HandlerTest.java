@@ -1,6 +1,6 @@
 package com.fishek.api.handler;
 
-import com.fishek.api.model.persistance.Flashcard;
+import com.fishek.api.model.persistence.Flashcard;
 import com.fishek.api.model.types.Language;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

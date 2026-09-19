@@ -1,13 +1,15 @@
 package com.fishek.api.service;
 
+import com.fishek.api.exception.BadRequestException;
 import com.fishek.api.exception.ConflictException;
 import com.fishek.api.exception.NotFoundException;
 import com.fishek.api.handler.Sm2Handler;
 import com.fishek.api.model.dto.LessonEvaluationFlashcard;
 import com.fishek.api.model.dto.LessonEvaluationRequest;
 import com.fishek.api.model.dto.NewLessonResponse;
-import com.fishek.api.model.persistance.Flashcard;
-import com.fishek.api.model.persistance.Lesson;
+import com.fishek.api.model.persistence.Flashcard;
+import com.fishek.api.model.persistence.Lesson;
+import com.fishek.api.model.persistence.LessonFlashcard;
 import com.fishek.api.model.types.Language;
 import com.fishek.api.repository.FlashcardRepository;
 import com.fishek.api.repository.LessonRepository;
@@ -110,8 +112,8 @@ class LessonServiceTest {
 
     @Test
     void shouldCompleteLessonWithCorrectStats() {
-        Lesson lesson = buildLesson(false);
         Flashcard flashcard = buildFlashcard(FLASHCARD_ID);
+        Lesson lesson = buildLesson(false, List.of(flashcard));
         LessonEvaluationRequest request = buildRequest(List.of(
                 new LessonEvaluationFlashcard(FLASHCARD_ID.toString(), true)
         ));
@@ -119,7 +121,7 @@ class LessonServiceTest {
         when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(lesson));
         when(flashcardRepository.findAllById(any())).thenReturn(List.of(flashcard));
 
-        lessonService.evaluateLesson(request);
+        lessonService.evaluateLesson(LESSON_ID.toString(), request);
 
         assertThat(lesson.getLessonCompleted()).isTrue();
         assertThat(lesson.getCorrectAnswersCount()).isEqualTo(1);
@@ -130,7 +132,7 @@ class LessonServiceTest {
     @Test
     void shouldApplySm2ForEachFlashcard() {
         Flashcard flashcard = buildFlashcard(FLASHCARD_ID);
-        Lesson lesson = buildLesson(false);
+        Lesson lesson = buildLesson(false, List.of(flashcard));
         LessonEvaluationRequest request = buildRequest(List.of(
                 new LessonEvaluationFlashcard(FLASHCARD_ID.toString(), true)
         ));
@@ -138,7 +140,7 @@ class LessonServiceTest {
         when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(lesson));
         when(flashcardRepository.findAllById(any())).thenReturn(List.of(flashcard));
 
-        lessonService.evaluateLesson(request);
+        lessonService.evaluateLesson(LESSON_ID.toString(), request);
 
         verify(sm2Handler).apply(flashcard, true);
     }
@@ -149,12 +151,12 @@ class LessonServiceTest {
         UUID id2 = UUID.randomUUID();
         UUID id3 = UUID.randomUUID();
 
-        Lesson lesson = buildLesson(false);
         List<Flashcard> flashcards = List.of(
                 buildFlashcard(id1),
                 buildFlashcard(id2),
                 buildFlashcard(id3)
         );
+        Lesson lesson = buildLesson(false, flashcards);
         LessonEvaluationRequest request = buildRequest(List.of(
                 new LessonEvaluationFlashcard(id1.toString(), true),
                 new LessonEvaluationFlashcard(id2.toString(), false),
@@ -164,7 +166,7 @@ class LessonServiceTest {
         when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(lesson));
         when(flashcardRepository.findAllById(any())).thenReturn(flashcards);
 
-        lessonService.evaluateLesson(request);
+        lessonService.evaluateLesson(LESSON_ID.toString(), request);
 
         assertThat(lesson.getCorrectAnswersCount()).isEqualTo(2);
         assertThat(lesson.getWrongAnswersCount()).isEqualTo(1);
@@ -174,21 +176,21 @@ class LessonServiceTest {
     void shouldThrowNotFoundExceptionWhenLessonNotFound() {
         when(lessonRepository.findById(any())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> lessonService.evaluateLesson(buildRequest(List.of())))
+        assertThatThrownBy(() -> lessonService.evaluateLesson(LESSON_ID.toString(), buildRequest(List.of())))
                 .isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void shouldThrowConflictExceptionWhenLessonAlreadyCompleted() {
-        when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(buildLesson(true)));
+        when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(buildLesson(true, List.of())));
 
-        assertThatThrownBy(() -> lessonService.evaluateLesson(buildRequest(List.of())))
+        assertThatThrownBy(() -> lessonService.evaluateLesson(LESSON_ID.toString(), buildRequest(List.of())))
                 .isInstanceOf(ConflictException.class);
     }
 
     @Test
     void shouldThrowNotFoundExceptionWhenFlashcardNotInMap() {
-        Lesson lesson = buildLesson(false);
+        Lesson lesson = buildLesson(false, List.of());
         LessonEvaluationRequest request = buildRequest(List.of(
                 new LessonEvaluationFlashcard(FLASHCARD_ID.toString(), true)
         ));
@@ -196,19 +198,36 @@ class LessonServiceTest {
         when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(lesson));
         when(flashcardRepository.findAllById(any())).thenReturn(List.of());
 
-        assertThatThrownBy(() -> lessonService.evaluateLesson(request))
+        assertThatThrownBy(() -> lessonService.evaluateLesson(LESSON_ID.toString(), request))
                 .isInstanceOf(NotFoundException.class);
     }
 
     @Test
     void shouldDoNothingWhenFlashcardsListIsEmpty() {
-        Lesson lesson = buildLesson(false);
+        Lesson lesson = buildLesson(false, List.of());
         when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(lesson));
 
-        lessonService.evaluateLesson(buildRequest(List.of()));
+        lessonService.evaluateLesson(LESSON_ID.toString(), buildRequest(List.of()));
 
         assertThat(lesson.getLessonCompleted()).isFalse();
         verify(sm2Handler, never()).apply(any(), anyBoolean());
+    }
+
+    @Test
+    void shouldThrowBadRequestExceptionWhenNotAllFlashcardsAnswered() {
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        List<Flashcard> flashcards = List.of(buildFlashcard(id1), buildFlashcard(id2));
+        Lesson lesson = buildLesson(false, flashcards);
+        LessonEvaluationRequest request = buildRequest(List.of(
+                new LessonEvaluationFlashcard(id1.toString(), true)
+        ));
+
+        when(lessonRepository.findById(LESSON_ID)).thenReturn(Optional.of(lesson));
+        when(flashcardRepository.findAllById(any())).thenReturn(List.of(flashcards.getFirst()));
+
+        assertThatThrownBy(() -> lessonService.evaluateLesson(LESSON_ID.toString(), request))
+                .isInstanceOf(BadRequestException.class);
     }
 
     private Flashcard buildFlashcard(UUID id) {
@@ -225,19 +244,24 @@ class LessonServiceTest {
         return f;
     }
 
-    private Lesson buildLesson(boolean completed) {
+    private Lesson buildLesson(boolean completed, List<Flashcard> flashcards) {
         Lesson l = new Lesson();
         l.setId(LESSON_ID);
         l.setLanguage(Language.ENGLISH);
-        l.setFlashcardsCount(1);
+        l.setFlashcardsCount(flashcards.size());
         l.setLessonCompleted(completed);
         l.setCorrectAnswersCount(0);
         l.setWrongAnswersCount(0);
         l.setLessonStartedTime(LocalDateTime.now());
+        l.getLessonFlashcards().addAll(
+                flashcards.stream()
+                        .map(f -> LessonFlashcard.builder().lesson(l).flashcard(f).build())
+                        .toList()
+        );
         return l;
     }
 
     private LessonEvaluationRequest buildRequest(List<LessonEvaluationFlashcard> flashcards) {
-        return new LessonEvaluationRequest(LESSON_ID.toString(), flashcards);
+        return new LessonEvaluationRequest(flashcards);
     }
 }
